@@ -21,12 +21,11 @@ def train_one():
     train an agent
     """
     print("==============Start Fetching Data===========")
-    df = pd.read_csv('C:\\Users\\Administrator\\Desktop\\stk_comp\\20210806-08h32.csv')
-    """YahooDownloader(
+    YahooDownloader(
         start_date=config.START_DATE,
         end_date=config.END_DATE,
         ticker_list=config.DOW_30_TICKER,
-    ).fetch_data()"""
+    ).fetch_data()
     print("==============Start Feature Engineering===========")
     fe = FeatureEngineer(
         use_technical_indicator=True,
