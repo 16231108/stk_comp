@@ -73,7 +73,7 @@ def train_one():
 
     model_sac = agent.get_model("sac")
     trained_sac = agent.train_model(
-        model=model_sac, tb_log_name="sac", total_timesteps=80000
+        model=model_sac, tb_log_name="sac", total_timesteps=8000
     )
 
     print("==============Start Trading===========")
