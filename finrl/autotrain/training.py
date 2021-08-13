@@ -23,19 +23,19 @@ def train_one():
     train an agent
     """
     print("==============Start Fetching Data===========")
-    '''
+    
     df = YahooDownloader(
         start_date=config.START_DATE,
         end_date=config.END_DATE,
         ticker_list=config.DOW_30_TICKER,
     ).fetch_data()
-    '''
+    
     #names=["date","open","high","low","close","volume","tic","day",]
     #df = pd.read_csv("./" + config.DATA_SAVE_DIR + "/" + "20210315-07h382" + ".csv",index_col=0)
     print('GPU is :',torch.cuda.is_available())
     all_model = []
     #df = pd.read_csv("./" + config.DATA_SAVE_DIR + "/" + "20210330-08h52" + ".csv", index_col=0)
-    df = pd.read_csv("./" + config.DATA_SAVE_DIR + "/" + "20210331-21h50" + ".csv", index_col=0)
+    #df = pd.read_csv("./" + config.DATA_SAVE_DIR + "/" + "20210331-21h50" + ".csv", index_col=0)
     #print(df)
     print("==============Start Feature Engineering===========")
     fe = FeatureEngineer(
