@@ -34,12 +34,14 @@ def main():
 
     if options.mode == "train":
         import finrl.autotrain.training
+        import finrl.autotrain.multi_training
+        import finrl.autotrain.ensemble_training
 
-        finrl.autotrain.training.train_one()
+        finrl.autotrain.multi_training.train_one()
 
     elif options.mode == "download_data":
         from finrl.marketdata.yahoodownloader import YahooDownloader
-
+        print('开始下载数据……')
         df = YahooDownloader(start_date=config.START_DATE,
                              end_date=config.END_DATE,
                              ticker_list=config.DOW_30_TICKER).fetch_data()

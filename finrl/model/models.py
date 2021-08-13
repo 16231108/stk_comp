@@ -3,11 +3,14 @@ import pandas as pd
 import numpy as np
 import time
 import gym
+import os
 
 # RL models from stable-baselines
 # from stable_baselines import SAC
 # from stable_baselines import TD3
-
+import matplotlib
+matplotlib.use('TkAgg')
+import matplotlib.pyplot as plt
 from stable_baselines3.ppo import MlpPolicy
 from stable_baselines3.common.vec_env import DummyVecEnv
 
@@ -22,8 +25,12 @@ from finrl.preprocessing.data import data_split
 from finrl.env.env_stocktrading import StockTradingEnv
 
 from stable_baselines3 import A2C
+from finrl.lxcalgorithms.lxcA2C import lxcA2C
+from finrl.lxcalgorithms.lxcSAC import lxcSAC
+from finrl.lxcalgorithms.lxcDDPG import lxcDDPG
 from stable_baselines3 import PPO
 from stable_baselines3 import TD3
+import random
 from stable_baselines3.td3.policies import MlpPolicy
 from stable_baselines3.common.noise import (
     NormalActionNoise,
@@ -33,7 +40,7 @@ from stable_baselines3.common.noise import (
 from stable_baselines3 import SAC
 
 
-MODELS = {"a2c": A2C, "ddpg": DDPG, "td3": TD3, "sac": SAC, "ppo": PPO}
+MODELS = {"a2c": A2C, "ddpg": DDPG, "td3": TD3, "sac": SAC, "ppo": PPO,"lxcA2C": lxcA2C,"lxcSAC": lxcSAC,"lxcDDPG": lxcDDPG,}
 
 MODEL_KWARGS = {x: config.__dict__[f"{x.upper()}_PARAMS"] for x in MODELS.keys()}
 
@@ -66,8 +73,7 @@ class DRLAgent:
         DRL_prediction()
             make a prediction in a test dataset and get results
     """
-
-    @staticmethod
+    '''   
     def DRL_prediction(model, environment):
         test_env, test_obs = environment.get_sb_env()
         """make a prediction"""
@@ -82,6 +88,122 @@ class DRLAgent:
             if i == (len(environment.df.index.unique()) - 2):
               account_memory = test_env.env_method(method_name="save_asset_memory")
               actions_memory = test_env.env_method(method_name="save_action_memory")
+            if dones[0]:
+                print("hit end!")
+                break
+        return account_memory[0], actions_memory[0]
+    '''
+
+    def writeFile(filename, data):
+        file = os.open(filename, 'wb')
+        file.write(data)
+        file.close()
+        print
+        'File had been writed Succed!'
+
+    @staticmethod
+    def DRL_prediction(model, environment):
+        def readFile(filename):
+            with open(str(filename), 'r') as f:
+                data = f.readlines()
+            return data
+        def writeFile(filename, data):
+            with open(filename, 'w') as f:
+                for oneData in data:
+                    f.write(str(oneData)+'\n')
+            print('File had been writed Succed!')
+        def lxcBagging(data):
+            #print(data)
+            temp_data =[]
+            rate = [0.25,0.50,0.25]
+            #rate = [1, 1, 1]
+            for i in range(len(data)):
+                if (len(temp_data) < 1):
+                    temp_data = data[i][0]*rate[i]
+                else:
+                    temp_data = np.array(data[i][0]*rate[i])+np.array(temp_data)
+            #temp_data = temp_data/len(data)
+            return np.array(temp_data)
+        def lxcRandomBagging(data):
+            temp_data =[]
+            rate = [0.250,0.500,0.250]
+            temp = random.randint(0, 11)
+            if(temp<=2):
+                temp_data = data[0][0]
+            elif temp<=8:
+                temp_data = data[1][0]
+            else:
+                temp_data = data[2][0]
+            #temp_data = temp_data/len(data)
+            return np.array(temp_data)
+        def lxcRandomBaggingSec(data,pro):
+            print(pro)
+            if(pro[0][0]>46 and pro[0][0]<56):
+                return np.array(data[0][0])
+            else:
+                if(pro[1][0]>30):
+                    return np.array(data[2][0])
+                else:
+                    return np.array(data[2][0])
+        def lxcRandomBaggingThird(data,pro):
+            #print(data[0][0][0])
+            temp = []
+            for i in range(len(data[0][0][0])):
+                pos = 0
+                number = 0
+                neg = 0
+                if(data[0][0][0][i]>0):
+                    if(data[1][0][0][i]<0 and data[2][0][0][i]<0):
+                        temp.append(data[2][0][0][i])
+                    else:
+                        temp.append(data[0][0][0][i])
+                else:
+                    if (data[1][0][0][i] > 0 and data[2][0][0][i] > 0):
+                        temp.append(data[2][0][0][i])
+                    else:
+                        temp.append(data[0][0][0][i])
+            return np.array([temp])
+        def lxcRLRL(data):
+            temp_data = []
+            if (data[3][0] >= 0.5):
+                temp_data = data[0][0]
+                print('A2C models',data[3][0])
+            elif data[3][0] >=-0.5:
+                temp_data = data[1][0]
+                print('SAC models', data[3][0])
+            else:
+                temp_data = data[2][0]
+                print('DDPG models', data[3][0])
+            # temp_data = temp_data/len(data)
+            return np.array(temp_data)
+        test_env, test_obs = environment.get_sb_env()
+        """make a prediction"""
+        account_memory = []
+        actions_memory = []
+        test_env.reset()
+        print('len(environment.df.index.unique()) is:',len(environment.df.index.unique()))
+        print()
+        for i in range(len(environment.df.index.unique())):
+            lxc_action = []
+            lxc_pro=[]
+            '''
+            for oneModel in model:
+                action, _states, pro = oneModel.predict(test_obs)
+                lxc_pro.append(abs(pro))
+                lxc_action.append((action,_states))
+                #action,_ = oneModel.predict(test_obs)
+                #print(action)
+            '''
+            #action, _states,pro = model.predict(test_obs)
+            #print('pro is:',lxc_pro)
+            action, _ = model.predict(test_obs)
+            #action = lxcRandomBaggingSec(lxc_action,lxc_pro)
+            # account_memory = test_env.env_method(method_name="save_asset_memory")
+            # actions_memory = test_env.env_method(method_name="save_action_memory")
+            test_obs, rewards, dones, info = test_env.step(action)
+            if i == (len(environment.df.index.unique()) - 2):
+                account_memory = test_env.env_method(method_name="save_asset_memory")
+                actions_memory = test_env.env_method(method_name="save_action_memory")
             if dones[0]:
                 print("hit end!")
                 break
@@ -122,7 +244,19 @@ class DRLAgent:
 
     def train_model(self, model, tb_log_name, total_timesteps=5000):
         model = model.learn(total_timesteps=total_timesteps, tb_log_name=tb_log_name)
+        #print(model.__class__)
+        model.save(f"{config.TRAINED_MODEL_DIR}/{tb_log_name.upper()}_{total_timesteps // 1000}k_{total_timesteps}lxc2")
+        #lxcModel = model.load(f"{config.TRAINED_MODEL_DIR}/{tb_log_name.upper()}_{total_timesteps // 1000}k_{total_timesteps}")
         return model
+    def train_lxc_model(self, model, tb_log_name, total_timesteps=5000,lxcType=None,lxcName = None):
+        if lxcType is None:
+            model = model.learn(total_timesteps=total_timesteps, tb_log_name=tb_log_name)
+            #model.save(                f"{config.TRAINED_MODEL_DIR}/{tb_log_name.upper()}_{total_timesteps // 1000}k_{total_timesteps}{lxcName}")
+            return model
+        #print(model.__class__)
+        #model.save(f"{config.TRAINED_MODEL_DIR}/{tb_log_name.upper()}_{total_timesteps // 1000}k_{total_timesteps}lxc2")
+        lxcModel = model.load(f"{config.TRAINED_MODEL_DIR}/{tb_log_name.upper()}_{total_timesteps // 1000}k_{total_timesteps}{lxcName}")
+        return lxcModel
 
 
 class DRLEnsembleAgent:
@@ -361,7 +495,7 @@ class DRLEnsembleAgent:
 
             print("======PPO Training========")
             model_ppo = self.get_model("ppo",self.train_env,policy="MlpPolicy",model_kwargs=PPO_model_kwargs)
-            model_ppo = self.train_model(model_ppo, "ppo", tb_log_name="ppo_{}".format(i), iter_num = i, total_timesteps=timesteps_dict['ppo']) #100_000
+            model_ppo = self.train_model(model_ppo, "ppo", tb_log_name="ppo{}".format(i), iter_num = i, total_timesteps=timesteps_dict['ppo']) #100_000
             print("======PPO Validation from: ", validation_start_date, "to ",validation_end_date)
             val_env_ppo = DummyVecEnv([lambda: StockTradingEnv(validation,
                                                                 self.stock_dim,

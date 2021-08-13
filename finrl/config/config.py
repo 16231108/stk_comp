@@ -37,11 +37,14 @@ RESULTS_DIR = "results"
 #START_TRADE_DATE = "2019-01-01"
 
 #lxc
-START_DATE = "2018-01-01"
-END_DATE = "2021-01-01"
+#START_DATE = "2010-01-01"
+START_DATE = "2020-11-15"
+#END_DATE = "2021-01-01"
+END_DATE = "2021-04-12"
 
-START_TRADE_DATE = "2019-01-01"
 
+#START_TRADE_DATE = "2020-10-01"
+START_TRADE_DATE = "2021-02-08"
 
 ## dataset default columns
 DEFAULT_DATA_COLUMNS = ["date", "tic", "close"]
@@ -49,10 +52,11 @@ DEFAULT_DATA_COLUMNS = ["date", "tic", "close"]
 ## stockstats technical indicator column names
 ## check https://pypi.org/project/stockstats/ for different names
 TECHNICAL_INDICATORS_LIST = ["macd","boll_ub","boll_lb","rsi_30", "cci_30", "dx_30","close_30_sma","close_60_sma"]
-
+#TECHNICAL_INDICATORS_LIST = ["macd"]
 
 ## Model Parameters
 A2C_PARAMS = {"n_steps": 5, "ent_coef": 0.01, "learning_rate": 0.0007}
+LXCA2C_PARAMS = {"n_steps": 5, "ent_coef": 0.01, "learning_rate": 0.0007}
 PPO_PARAMS = {
     "n_steps": 2048,
     "ent_coef": 0.01,
@@ -60,8 +64,18 @@ PPO_PARAMS = {
     "batch_size": 64,
 }
 DDPG_PARAMS = {"batch_size": 128, "buffer_size": 50000, "learning_rate": 0.001}
+LXCDDPG_PARAMS = {"batch_size": 128, "buffer_size": 50000, "learning_rate": 0.001}
 TD3_PARAMS = {"batch_size": 100, "buffer_size": 1000000, "learning_rate": 0.001}
 SAC_PARAMS = {
+    "batch_size": 64,
+    "buffer_size": 100000,
+    "learning_rate": 0.0001,
+    "learning_starts": 100,
+    "batch_size": 64,
+    "ent_coef": "auto_0.1",
+}
+
+LXCSAC_PARAMS = {
     "batch_size": 64,
     "buffer_size": 100000,
     "learning_rate": 0.0001,
@@ -140,8 +154,88 @@ DOW_30_TICKER = [
 ]
 '''
 DOW_30_TICKER = [
-    "AAPL"
+    "102364",
+    "601878",  # 平安银行
+    "102740",  # 平安银行
+    "600072",  # 平安银行
+    "600685",  # 平安银行
+    #"600519",
+    #"603555"
+    "102813",  # 平安银行
+
 ]
+''' 
+DOW_30_TICKER = [
+    "000001.SZ",#平安银行
+    "000002.SZ",#万 科Ａ
+       
+    "000004.SZ",#国华网安
+    "000005.SZ",#世纪星源
+    "000006.SZ",#深振业Ａ
+    "000007.SZ",#全新好
+    "000008.SZ",#神州高铁
+    "000009.SZ",#中国宝安
+    "000010.SZ",#美丽生态
+    "000011.SZ",#深物业A
+    "000012.SZ",#南 玻Ａ
+    "000014.SZ",#沙河股份
+    "000016.SZ",#深康佳Ａ
+    "000017.SZ",#*ST中华A
+    "000019.SZ",#深粮控股
+    "000020.SZ",#深华发Ａ
+    "000021.SZ",#深科技
+    "000023.SZ",#深天地Ａ
+    "000025.SZ",#特 力Ａ
+    "000026.SZ",#飞亚达
+    "000027.SZ",#深圳能源
+    "000028.SZ",#国药一致
+    "000029.SZ",#深深房Ａ
+    "000030.SZ",#富奥股份
+    "000031.SZ",#大悦城
+    "000032.SZ",#深桑达Ａ
+    "000034.SZ",#神州数码
+    "000035.SZ",#中国天楹
+    "000036.SZ",#华联控股
+    "000037.SZ"#深南电A
+    
+    #"WBA",
+    #"DD"
+]
+'''
+'''
+DOW_30_TICKER = [
+    "AAPL",
+    "MSFT",
+    "JPM",
+    "V",
+    "RTX",
+    "PG",
+    "GS",
+    "NKE",
+    "DIS",
+    "AXP",
+    "HD",
+    "INTC",
+    "WMT",
+    "IBM",
+    "MRK",
+    "UNH",
+    "KO",
+    "CAT",
+    "TRV",
+    "JNJ",
+    "CVX",
+    "MCD",
+    "VZ",
+    "CSCO",
+    "XOM",
+    "BA",
+    "MMM",
+    "PFE",
+    "WBA",
+    "DD",
+]
+'''
 # Nasdaq 100 constituents at 2019/01
 NAS_100_TICKER = [
     "AMGN",

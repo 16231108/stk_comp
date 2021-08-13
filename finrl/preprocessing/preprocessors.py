@@ -71,13 +71,16 @@ class FeatureEngineer:
         """
         df = data.copy()
         stock = Sdf.retype(df.copy())
+        print("stock is:",stock)
         unique_ticker = stock.tic.unique()
 
         for indicator in self.tech_indicator_list:
             indicator_df = pd.DataFrame()
             for i in range(len(unique_ticker)):
                 try:
+                    #print()
                     temp_indicator = stock[stock.tic == unique_ticker[i]][indicator]
+                    #print("temp_indicator is:",temp_indicator)
                     temp_indicator = pd.DataFrame(temp_indicator)
                     indicator_df = indicator_df.append(
                         temp_indicator, ignore_index=True
@@ -122,7 +125,7 @@ class FeatureEngineer:
         df_price_pivot = df_price_pivot.pct_change()
 
         unique_date = df.date.unique()
-        print('unique_date',unique_date)
+        #print('unique_date',unique_date)
         # start after a year
         start = 252
         #start = 0
@@ -154,9 +157,9 @@ class FeatureEngineer:
             else:
                 turbulence_temp = 0
             turbulence_index.append(turbulence_temp)
-        print('data',df_price_pivot.index)
-        print('turbulence', turbulence_index)
+        print('data length is:',len(df_price_pivot.index))
+        print('len(turbulence) is:', len(turbulence_index))
         turbulence_index = pd.DataFrame(
-            {"date": df_price_pivot.index, "turbulence": turbulence_index}
+            {"date": df_price_pivot.index, "turbulence": turbulence_index[0:len(df_price_pivot.index)]}
         )
         return turbulence_index
