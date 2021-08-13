@@ -1,3 +1,4 @@
+#coding=utf-8
 """Contains methods and classes to collect data from
 Yahoo Finance API
 """
@@ -59,7 +60,7 @@ class YahooDownloader:
         print('lxc:',len(self.ticker_list))
         lxc_temp = 1
         for tic in self.ticker_list:
-            print('正在下载第',lxc_temp,'个数据')
+            #print('正在下载第',lxc_temp,'个数据')
             lxc_temp = lxc_temp+1
             #temp_df = yf.download(tic, start=self.start_date, end=self.end_date)
             temp_df = self.lxcDownload(tic)
