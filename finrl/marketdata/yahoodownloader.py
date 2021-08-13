@@ -1,4 +1,4 @@
-#coding=utf-8
+#coding=gbk
 """Contains methods and classes to collect data from
 Yahoo Finance API
 """
