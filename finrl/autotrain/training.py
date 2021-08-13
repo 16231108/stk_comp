@@ -92,13 +92,13 @@ def train_one():
 
     ###################################################################################################a2c
     print("start training a2c model")
-    model_a2c = agent.get_model("a2c")
-    trained_a2c = agent.train_lxc_model(
+    model_sac = agent.get_model("sac")
+    trained_sac = agent.train_lxc_model(
         #model=model_a2c, tb_log_name="a2c", total_timesteps=80000,lxcType=1,lxcName="lxc2"
-        model=model_a2c, tb_log_name="a2c", total_timesteps=1800, lxcType=None, lxcName="lxc3"
+        model=model_sac, tb_log_name="sac", total_timesteps=1800, lxcType=None, lxcName="lxc3"
     )
     #print('trained_a2c is:', trained_a2c)
-    all_model.append(trained_a2c)
+    all_model.append(trained_sac)
 
     
     ####################################################################sac
@@ -145,7 +145,7 @@ def train_one():
     )
     '''
     df_account_value, df_actions = DRLAgent.DRL_prediction(
-        model=trained_a2c, environment=e_trade_gym
+        model=trained_sac, environment=e_trade_gym
         #model=trained_ddpg, environment=e_trade_gym
     )
 
