@@ -95,7 +95,7 @@ def train_one():
     model_a2c = agent.get_model("a2c")
     trained_a2c = agent.train_lxc_model(
         #model=model_a2c, tb_log_name="a2c", total_timesteps=80000,lxcType=1,lxcName="lxc2"
-        model=model_a2c, tb_log_name="a2c", total_timesteps=180000, lxcType=None, lxcName="lxc3"
+        model=model_a2c, tb_log_name="a2c", total_timesteps=1800, lxcType=None, lxcName="lxc3"
     )
     #print('trained_a2c is:', trained_a2c)
     all_model.append(trained_a2c)
