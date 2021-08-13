@@ -58,15 +58,13 @@ class YahooDownloader:
         print('lxc:',len(self.ticker_list))
         lxc_temp = 1
         for tic in self.ticker_list:
-            #print('正在下载第',lxc_temp,'个数据')
+            #print('download ',lxc_temp,'个数据')
             lxc_temp = lxc_temp+1
             temp_df = yf.download(tic, start=self.start_date, end=self.end_date)
-            #temp_df = self.lxcDownload(tic)
-            #print(temp_df)
             #temp_df = hsDownloadData(en_prod_code =tic, begin_date=self.start_date, end_date=self.end_date)
             #print('type temp_df is:', type(temp_df))
             #print('temp_df is:',temp_df)
-            temp_df["tic"] = str(tic)
+            temp_df["tic"] = tic
             data_df = data_df.append(temp_df)
         # reset the index, we want to use numbers as index instead of dates
         data_df = data_df.reset_index()
@@ -92,7 +90,7 @@ class YahooDownloader:
         data_df["day"] = data_df["date"].dt.dayofweek
         # convert date to standard string format, easy to filter
         data_df["date"] = data_df.date.apply(lambda x: x.strftime("%Y-%m-%d"))
-        # drop missing data  Y
+        # drop missing data
         data_df = data_df.dropna()
         data_df = data_df.reset_index(drop=True)
         print("Shape of DataFrame: ", data_df.shape)
