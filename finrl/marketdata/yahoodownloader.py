@@ -1,8 +1,9 @@
-#coding=utf-8
-#coding=gbk
 """Contains methods and classes to collect data from
 Yahoo Finance API
 """
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 import pandas as pd
 import baostock as bs
