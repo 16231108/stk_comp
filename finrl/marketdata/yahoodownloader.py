@@ -60,9 +60,9 @@ class YahooDownloader:
         for tic in self.ticker_list:
             #print('正在下载第',lxc_temp,'个数据')
             lxc_temp = lxc_temp+1
-            #temp_df = yf.download(tic, start=self.start_date, end=self.end_date)
-            temp_df = self.lxcDownload(tic)
-            print(temp_df)
+            temp_df = yf.download(tic, start=self.start_date, end=self.end_date)
+            #temp_df = self.lxcDownload(tic)
+            #print(temp_df)
             #temp_df = hsDownloadData(en_prod_code =tic, begin_date=self.start_date, end_date=self.end_date)
             #print('type temp_df is:', type(temp_df))
             #print('temp_df is:',temp_df)
